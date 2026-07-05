@@ -1,21 +1,76 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
+<!--Heading on the main page -->
+ <h1 style="text-align: center;">Auctions</h1>
+
+<!-- if statement to check if the user is authennticated-->
+<div>
+   {% if user.is_authenticated %}
+         Signed in as <strong>{{ user.username }}</strong>.
+   {% else %}
+         Not signed in.
+   {% endif %}
+</div>
+<!--The navigation bar -->
+<ul class="nav" style="background-color:whitesmoke; border-radius: 20px;">
+      <li class="nav-item">
+         <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+      </li>
+
+         {% if user.is_authenticated %}
+          <li class="nav-item">
+               <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+         </li>
+          <li class="nav-item">
+                <a class="nav-link" href="{% url 'add' %}">Creat Listing</a>
+         </li>
+
+         <li class="nav-item">
+               <a href="{% url 'watchlist' %}"> Watchlist</a>
+            </li>
+
+         {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+            </li>
+               <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+            </li>
+
+            
+             
+       {% endif %}
+ </ul>
+
+<!-- The for loop to display the listings -->
+
     <h2>Active Listings</h2>
      
    {% for listing in listings%}
-   <div class="container">
+   <!-- the container that  displays all the listing on a page -->
+   <div class="reg" >
         <div class="list">
-       <li> Product Name: <a href="{% url 'listing' listing.id%}"> {{listing.Name}}</li>   
-      
-          <img src="{{ listing.cover.url}}" alt="{{ listing.title }}" style="max-width: 800px;">
-                                                   
-          <li>StartingBid:  $ {{listing.Starting_Bid}}</li>
+         <!--Product name  and id-->
+        <li> Product Name: <a href="{% url 'listing' listing.id%}"> {{listing.Name}}</li>   
+        <!--The tag to display the product image -->
+        <img src="{{ listing.cover.url}}" alt="{{ listing.title }}" style="max-width: 600px;">                                      
         </a> 
-         <li>Active Listing: {{listing.isActive}}</li>
         </div>
    </div>
    {%endfor%}
+
+<!--Comments  for the listing-->
+{% for comment in Comments %}
+    <div style="border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 5px;">
+        <strong>{{ comment.commenter.username }}</strong> 
+        <span style="color: #888; font-size: 12px;">{{ comment.created_at|date:"M d, Y H:i" }}</span>
+        <p>{{ comment.text }}</p>
+    </div>
+{% empty %}
+    <p>No comments yet.</p>
+{% endfor %}
+
     
 {% endblock %}
 

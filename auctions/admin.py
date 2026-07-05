@@ -1,11 +1,13 @@
 from django.contrib import admin
-from.models import User, Listing,category
+from.models import User, Listing,Category,watchlist,Comments
 # customized the admin pannel 
 class ListingAdmin(admin.ModelAdmin):
-    list_display =("id" , "Name","cover","Starting_Bid", "Description","isActive","category","Lister",)
+    list_display =("id" , "Name","cover","Starting_Bid", "Description","isActive","category","Lister")
 
 # Register your models here.
 admin.site.register(Listing,ListingAdmin)
 admin.site.register(User)
-admin.site.register(category)
+admin.site.register(Category)
+admin.site.register(watchlist)
+admin.site.register(Comments)
 

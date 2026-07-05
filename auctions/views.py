@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
-from .models import User,Listing
+from .models import User,Listing, Category, Comments
 
 # function to  load the main page
 
@@ -28,7 +28,8 @@ class NewListingForm(forms.Form):
     cover =forms.FileField(label="Add Product Image")
     Starting_Bid = forms.IntegerField(label="Place Bid")
     Description = forms.CharField(label="Product Description")
-    category =forms.CharField(label="Category")
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), label="Category")
+
     isActive =forms.BooleanField()
 # function to add New Listing, request method is post
 def add(request):
@@ -59,7 +60,7 @@ def add(request):
   
 
 
-
+# The function to login , it does the authentication  and password confirmation 
 
 def login_view(request):
     if request.method == "POST":
@@ -80,12 +81,11 @@ def login_view(request):
     else:
         return render(request, "auctions/login.html")
 
-
+# The logout function 
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
-
+#The function to register new users 
 def register(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -111,3 +111,18 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+# Function for the watchlist page 
+
+def Watchlist(request):
+    return render(request,"auctions/watchlist.html")
+
+# functions for the comment
+#def listing(request, listing_id):
+    comments = Comments.objects.filter(listing=listing)  # Get all comments for this listing
+    
+    return render(request, "auctions/listing.html", {
+        "listing": listing,
+        "Comments": comments,  # Pass comments to template
+    })

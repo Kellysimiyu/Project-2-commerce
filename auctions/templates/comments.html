@@ -1,0 +1,9 @@
+{% for comment in Comments %}
+    <div style="border: 1px solid #ddd; padding: 10px; margin: 5px 0; border-radius: 5px;">
+        <strong>{{ comment.commenter.username }}</strong> 
+        <span style="color: #888; font-size: 12px;">{{ comment.created_at|date:"M d, Y H:i" }}</span>
+        <p>{{ comment.text }}</p>
+    </div>
+{% empty %}
+    <p>No comments yet.</p>
+{% endfor %}

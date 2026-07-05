@@ -1,12 +1,30 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h1>Create Listing:</h1>
-<form  method="post" enctype="multipart/form-data">
+<div style="max-width: 500px; margin: 50px auto; padding: 30px; background: white; border-radius: 10px; border: 2px solid lightgray;">
+    <h1 style="text-align: center; color: darkblue;">Create Listing</h1>
+    <!--form  to add new listing -->
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
-    <button type="submit">Add Listing</button>
-           
-</form>
+        <!--Loop through the form data-->
+        {% for field in form %}
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px; color: darkslategray;">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+            </div>
+        {% endfor %}
+        <!--the submit button-->
+        <button type="submit">
+            Add Listing
+        </button>
+    </form>
+    <!-- Link to the home page-->
+    <p style="text-align: center; margin-top: 15px;">
+        <a href="{% url 'index' %}" style="color: dodgerblue;">Back to Home</a>
+    </p>
+</div>
+
 
 {% endblock %}

@@ -7,13 +7,12 @@ class User(AbstractUser):
      id = models.BigAutoField(primary_key=True)
       
    # model for the category 
-class category(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    category= models.CharField(max_length=20)
 
+class Category(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    
     def __str__(self):
-        return f"{self.category}"
-
+        return self.name
 
 # model for the listing
 
@@ -24,7 +23,7 @@ class Listing(models.Model):
     Starting_Bid =models.IntegerField()
     Description = models.CharField(max_length=300)
     isActive =models.BooleanField()
-    category= models.ForeignKey(category,on_delete=models.CASCADE,null=True)
+    category= models.ForeignKey(Category,on_delete=models.CASCADE,null=True)
     Lister =models.ForeignKey(User,on_delete=models.CASCADE,null=True, related_name="User")
 
     
@@ -33,4 +32,20 @@ class Listing(models.Model):
   
 
 
+# models for the watchlist 
+class watchlist(models.Model):
+    user =models.ForeignKey(User, on_delete=models.CASCADE, related_name="wathclist")
+    listing = models.ForeignKey(Listing,on_delete=models.CASCADE, related_name="watchlist")
 
+    def __str__(self):
+        return f"{self.user.username} watching {self.listing.Name}"
+    
+#Models for Comments 
+class Comments(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    text = models.TextField()  # Add this field for the comment content
+    created_at = models.DateTimeField(auto_now_add=True)  # Add timestamp
+    
+    def __str__(self):
+        return f"Comment by {self.commenter.username} on {self.listing.Name}"
